@@ -97,4 +97,75 @@ public class Node {
 
         return translate;
     }
+
+    public void addNewCharacter(char newCharacter, String newMorseCode) {
+        if (newMorseCode == null || newMorseCode.isBlank()) {
+            System.out.println("Codigo morse n pode estar vazio");
+            System.exit(1);
+        }
+
+        for (char c: newMorseCode.toCharArray()) {
+            if (c != '.' && c != '-') {
+                System.out.println("Codigo morse invalido, somente '-' e '.' permitidos");
+                System.exit(1);
+            }
+        }
+
+        newCharacter = Character.toUpperCase(newCharacter);
+
+        if (findCharacter(newCharacter, this)) {
+            System.out.println("Caracter ja existente");
+            System.exit(1);
+        }
+
+        if (findMorseCode(newMorseCode, this)) {
+            System.out.println("Codigo morse ja existe na arvore");
+            System.exit(1);
+        }
+
+        addNewCharacterRecursive(newCharacter, newMorseCode, this);
+    }
+
+    private void addNewCharacterRecursive(char newCharacter, String newMorseCode, Node currentNode) {
+        if (newMorseCode.isEmpty()) {
+            currentNode.value = newCharacter;
+            return;
+        }
+
+        char morseChar = newMorseCode.charAt(0);
+        String remainingMorseCode = newMorseCode.substring(1);
+
+        if (morseChar == '.') {
+            if (currentNode.left == null) currentNode.left = new Node(null);
+            addNewCharacterRecursive(newCharacter, remainingMorseCode, currentNode.left);
+        } else {
+            if (currentNode.right == null) currentNode.right = new Node(null);
+            addNewCharacterRecursive(newCharacter, remainingMorseCode, currentNode.right);
+        }
+    }
+
+    private boolean findCharacter(char targetChar, Node currentNode) {
+        if (currentNode == null) return false;
+
+        if (currentNode.value != null && currentNode.value.equals(targetChar)) return true;
+
+        return findCharacter(targetChar, currentNode.left) || findCharacter(targetChar, currentNode.right);
+    }
+
+    private boolean findMorseCode(String targetMorseCode, Node currentNode) {
+        if (currentNode == null) return false;
+
+        if (targetMorseCode.isEmpty()) return currentNode.value != null;
+
+        char morseChar = targetMorseCode.charAt(0);
+        String remainingMorseCode = targetMorseCode.substring(1);
+
+        Node nextNode;
+        if (morseChar == '.') nextNode = currentNode.left;
+        else nextNode = currentNode.right;
+
+        if (nextNode == null) return false;
+
+        return findMorseCode(remainingMorseCode, nextNode);
+    }
 }

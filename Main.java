@@ -2,12 +2,33 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.Stack;
 
 public class Main {
     public static void main(String[] args) {
-        String filePath = "alfabeto.txt";
         Node tree = new Node("START");
+        initializeMorseCodeBinaryThree(tree);
+
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("Digite codigo morse tendo cada letra separada por espaco (ex: .. .- .):");
+            String morseCode = scanner.nextLine();
+            System.out.println(tree.decodeMorseCode(morseCode));
+
+            System.out.println("Digite um oração contendo somente letras do alfabeto ou espaços (ou caracteres anteriormente adicionados)");
+            String input = scanner.nextLine();
+            System.out.println(tree.encodeToMorseCode(input));
+
+            System.out.println("Digite um caracter a ser adicionado");
+            char newChar = scanner.nextLine().charAt(0);
+            System.out.println("Digite o codigo morse para o caracter anteriormente digitado");
+            String newMorseCode = scanner.nextLine();
+            tree.addNewCharacter(newChar, newMorseCode);
+        }
+    }
+
+    private static void initializeMorseCodeBinaryThree(Node tree) {
+        String filePath = "alfabeto.txt";
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -33,16 +54,7 @@ public class Main {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(1);
         }
-
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Digite codigo morse tendo cada letra separada por espaco (ex: .. .- .):\n");
-        String morseCode = scanner.nextLine();
-        System.out.println(tree.decodeMorseCode(morseCode));
-
-        System.out.println("Digite um oração contendo somente letras do alfabeto ou espaços");
-        String input = scanner.nextLine();
-        System.out.println(tree.encodeToMorseCode(input));
     }
 }

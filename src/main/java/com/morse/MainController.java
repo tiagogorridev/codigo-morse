@@ -12,9 +12,9 @@ import java.io.InputStreamReader;
 
 public class MainController {
 
-    @FXML private VBox inserirPanel, removerPanel, codificarPanel, decodificarPanel;
-    @FXML private TextField letraInput, morseInput, removerInput, textoInput, morseInputDecode;
-    @FXML private TextArea resultadoCodificacao, resultadoDecodificacao, mensagensArea;
+    @FXML private VBox inserirPanel, removerPanel, codificarPanel, decodificarPanel, buscarProfundidadePanel;
+    @FXML private TextField letraInput, morseInput, removerInput, textoInput, morseInputDecode, profundidadeInput;
+    @FXML private TextArea resultadoCodificacao, resultadoDecodificacao, mensagensArea, resultadoProfundidade;
     @FXML private Canvas treeCanvas;
 
     private Node arvore;
@@ -91,6 +91,7 @@ public class MainController {
     @FXML private void mostrarRemover() { mostrarPainel(removerPanel); }
     @FXML private void mostrarCodificar() { mostrarPainel(codificarPanel); }
     @FXML private void mostrarDecodificar() { mostrarPainel(decodificarPanel); }
+    @FXML private void mostrarBuscaProfundidade() { mostrarPainel(buscarProfundidadePanel); }
 
     @FXML
     private void inserirCaractere() {
@@ -254,4 +255,48 @@ public class MainController {
         if (atual.length() > 800) atual = atual.substring(0, 400);
         mensagensArea.setText(msg + "\n" + atual);
     }
+
+    public int calcularProfundidade() {
+        return calcularProfundidadeRecursivo(arvore);
+    }
+
+    private int calcularProfundidadeRecursivo(Node node) {
+        if (node == null) return 0;
+        int esquerda = calcularProfundidadeRecursivo(node.left);
+        int direita = calcularProfundidadeRecursivo(node.right);
+        return 1 + Math.max(esquerda, direita);
+    }
+
+    @FXML
+    private void buscarProfundidadeCaractere() {
+
+        String texto = profundidadeInput.getText().trim();
+    
+        if (texto.isEmpty()) {
+            adicionarMensagem("ERRO: Digite um caractere!");
+            return;
+        }
+    
+        if (texto.length() > 1) {
+            adicionarMensagem("ERRO: Digite apenas um caractere!");
+            return;
+        }
+    
+        try {
+
+            char caractere = texto.charAt(0);
+            int profundidade = arvore.buscarProfundidade(caractere);
+    
+            resultadoProfundidade.setText("Profundidade: " + profundidade);
+            adicionarMensagem("Busca realizada com sucesso");
+        
+        } catch (Exception e) {
+        
+            adicionarMensagem("ERRO: Caractere não encontrado");
+        
+        }
+
+    }
+
+
 }

@@ -19,6 +19,7 @@
       <Button onAction="#mostrarCodificar" text="Codificar" prefWidth="90"/>
       <Button onAction="#mostrarDecodificar" text="Decodificar" prefWidth="90"/>
       <Button onAction="#atualizarArvore" text="Ver Árvore" prefWidth="90"/>
+      <Button onAction="#mostrarBuscaProfundidade" text="Buscar profundidade" prefWidth="90"/>
    </HBox>
    
    <!-- Painéis -->
@@ -51,6 +52,15 @@
       <TextField fx:id="morseInputDecode" promptText="Código morse"/>
       <Button onAction="#decodificarMorse" text="Decodificar"/>
       <TextArea fx:id="resultadoDecodificacao" prefHeight="60" editable="false"/>
+   </VBox>
+
+   <VBox fx:id="buscarProfundidadePanel" visible="false" managed="false" spacing="10">
+      <Label text="Buscar Profundidade:" style="-fx-font-weight: bold"/>
+      <HBox spacing="10">
+         <TextField fx:id="profundidadeInput" promptText="Caractere" prefWidth="120"/>
+         <Button onAction="#buscarProfundidadeCaractere" text="Buscar"/>
+      </HBox>
+      <TextArea fx:id="resultadoProfundidade" prefHeight="40" editable="false"/>
    </VBox>
    
    <!-- Mensagens -->

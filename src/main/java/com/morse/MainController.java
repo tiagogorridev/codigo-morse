@@ -286,8 +286,9 @@ public class MainController {
 
             char caractere = texto.charAt(0);
             int profundidade = arvore.buscarProfundidade(caractere);
-    
-            resultadoProfundidade.setText("Profundidade: " + profundidade);
+
+            if(profundidade < 0) resultadoProfundidade.setText("Profundidade não pôde ser identificada");
+            else resultadoProfundidade.setText("Profundidade: " + profundidade);
             adicionarMensagem("Busca realizada com sucesso");
         
         } catch (Exception e) {

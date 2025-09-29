@@ -99,4 +99,29 @@ public class Node {
 
         return translate;
     }
+
+    public int buscarProfundidade(char caractere) {
+        return buscarProfundidadeRec(this, caractere, 0);
+    }
+    
+    private int buscarProfundidadeRec(Node currNode, char caractere, int profundidade) {
+        
+        if (currNode == null) {
+            return -1; // não encontrado
+        }
+    
+        if (currNode.value != null && currNode.value.equals(Character.toUpperCase(caractere))) {
+            return profundidade;
+        }
+    
+        // busca na esquerda
+        int esquerda = buscarProfundidadeRec(currNode.left, caractere, profundidade + 1);
+        if (esquerda != -1) {
+            return esquerda;
+        }
+    
+        // busca na direita
+        return buscarProfundidadeRec(currNode.right, caractere, profundidade + 1);
+    }
+
 }

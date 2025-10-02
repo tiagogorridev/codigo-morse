@@ -1,3 +1,4 @@
-com/morse/MorseApp.class
-com/morse/MainController.class
-com/morse/Node.class
+com\morse\Node.class
+com\morse\BTree.class
+com\morse\MainController.class
+com\morse\MorseApp.class

@@ -180,4 +180,57 @@ public class BTree {
         }
         return atual.value != null;
     }
+
+    public int calcularAltura() {
+        return calcularAlturaRec(root);
+    }
+
+    private int calcularAlturaRec(Node node) {
+
+        if (node == null) 
+            return 0;
+        else 
+            return Math.max(calcularAlturaRec(node.left), calcularAlturaRec(node.right)) + 1;
+
+    }
+
+    public int calcularAlturaDaLetra(char letra) {
+
+        return calcularAlturaDaLetraRec(root, letra);
+
+    }
+
+    private int calcularAlturaDaLetraRec(Node node, char letra) {
+
+        if(node == null){
+
+            return 0;
+
+        } if (node.value.equals(letra)){
+
+            return calcularAlturaRec(node);
+
+        } else {
+
+            return Math.max(
+                calcularAlturaDaLetraRec(node.left, letra), 
+                calcularAlturaDaLetraRec(node.right, letra)
+            );
+
+        }
+
+    }
+
+    public int contarLetras() {
+        return contarNosRec(root);
+    }
+
+    private int contarNosRec(Node node) {
+
+        if (node == null) return 0;
+
+        return (node.value.equals("")) ? contarNosRec(node.left) + contarNosRec(node.right) : 1 + contarNosRec(node.left) + contarNosRec(node.right);
+
+    }
+    
 }

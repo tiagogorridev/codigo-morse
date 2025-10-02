@@ -17,62 +17,20 @@ public class MainController {
     @FXML private TextArea resultadoCodificacao, resultadoDecodificacao, mensagensArea, resultadoProfundidade;
     @FXML private Canvas treeCanvas;
 
-    private Node arvore;
+    private BTree arvore;
 
     @FXML
     private void initialize() {
-        arvore = new Node(null);
+        arvore = new BTree(null);
         esconderTodosPaineis();
-        carregarAlfabetoInicial();
+
+        if (arvore.carregarAlfabetoInicial()) {
+            adicionarMensagem("Alfabeto carregado");
+            atualizarArvore();
+        } else adicionarMensagem("Aviso: Alfabeto não carregado.");
+
         adicionarMensagem("Sistema inicializado.");
     }
-
-    private void carregarAlfabetoInicial() {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                getClass().getResourceAsStream("/data/alfabeto.txt")))) {
-
-            String linha;
-            int count = 0;
-            while ((linha = br.readLine()) != null) {
-                String[] partes = linha.trim().split(" ");
-                if (partes.length == 2) {
-                    try {
-                        addNewCharacter(arvore, partes[0].charAt(0), partes[1]);
-                        count++;
-                    } catch (Exception e) {
-                        // ignora erros individuais, continua carregando
-                    }
-                }
-            }
-            if (count > 0) {
-                adicionarMensagem("Alfabeto carregado: " + count + " caracteres");
-                atualizarArvore();
-            }
-        } catch (IOException e) {
-            adicionarMensagem("Aviso: Alfabeto não carregado.");
-        }
-    }
-
-    // >>> Método que faz a inserção na árvore sem alterar Node.java <<<
-    private void addNewCharacter(Node root, char letter, String morseCode) throws Exception {
-        Node current = root;
-        for (char c : morseCode.toCharArray()) {
-            if (c == '.') {
-                if (current.left == null) current.left = new Node(null);
-                current = current.left;
-            } else if (c == '-') {
-                if (current.right == null) current.right = new Node(null);
-                current = current.right;
-            } else {
-                throw new Exception("Código inválido (use apenas . ou -).");
-            }
-        }
-        if (current.value != null) {
-            throw new Exception("Já existe um caractere neste código.");
-        }
-        current.value = letter;
-    }
-
     private void esconderTodosPaineis() {
         VBox[] paineis = {inserirPanel, removerPanel, codificarPanel, decodificarPanel};
         for (VBox painel : paineis) {
@@ -98,7 +56,7 @@ public class MainController {
         String letra = letraInput.getText().trim().toUpperCase();
         String morse = morseInput.getText().trim();
 
-        if (letra.isEmpty() || morse.isEmpty() || letra.length() != 1 || !Character.isLetter(letra.charAt(0))) {
+        if (letra.isEmpty() || morse.isEmpty() || letra.length() != 1) {
             adicionarMensagem("ERRO: Digite uma letra válida!");
             return;
         }
@@ -114,13 +72,13 @@ public class MainController {
             return;
         }
 
-        if (codigoExiste(morse)) {
+        if (arvore.codigoExiste(morse)) {
             adicionarMensagem("ERRO: Código já existe!");
             return;
         }
 
         try {
-            addNewCharacter(arvore, c, morse);
+            arvore.addNewCharacter(c, morse);
             adicionarMensagem("Inserido: " + c + " = " + morse);
             letraInput.clear();
             morseInput.clear();
@@ -131,23 +89,9 @@ public class MainController {
     }
 
     private boolean caracterExiste(char letra) {
-        return buscarCaractere(arvore, letra);
+        return arvore.buscarCaractere(letra);
     }
 
-    private boolean buscarCaractere(Node node, char letra) {
-        if (node == null) return false;
-        if (node.value != null && node.value.equals(letra)) return true;
-        return buscarCaractere(node.left, letra) || buscarCaractere(node.right, letra);
-    }
-
-    private boolean codigoExiste(String codigo) {
-        Node atual = arvore;
-        for (char c : codigo.toCharArray()) {
-            atual = (c == '.') ? atual.left : atual.right;
-            if (atual == null) return false;
-        }
-        return atual.value != null;
-    }
 
     @FXML private void removerCaractere() { adicionarMensagem("Remoção não implementada."); }
 
@@ -201,7 +145,7 @@ public class MainController {
         GraphicsContext gc = treeCanvas.getGraphicsContext2D();
         gc.clearRect(0, 0, treeCanvas.getWidth(), treeCanvas.getHeight());
         if (arvore != null) {
-            desenharNo(gc, arvore, treeCanvas.getWidth() / 2, 40, treeCanvas.getWidth() / 4);
+            desenharNo(gc, arvore.root, treeCanvas.getWidth() / 2, 40, treeCanvas.getWidth() / 4);
         }
     }
 
@@ -254,17 +198,6 @@ public class MainController {
         String atual = mensagensArea.getText();
         if (atual.length() > 800) atual = atual.substring(0, 400);
         mensagensArea.setText(msg + "\n" + atual);
-    }
-
-    public int calcularProfundidade() {
-        return calcularProfundidadeRecursivo(arvore);
-    }
-
-    private int calcularProfundidadeRecursivo(Node node) {
-        if (node == null) return 0;
-        int esquerda = calcularProfundidadeRecursivo(node.left);
-        int direita = calcularProfundidadeRecursivo(node.right);
-        return 1 + Math.max(esquerda, direita);
     }
 
     @FXML

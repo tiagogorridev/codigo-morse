@@ -13,16 +13,17 @@
    <Label text="Árvore Binária de Código Morse" style="-fx-font-size: 24px; -fx-font-weight: bold"/>
    
    <!-- Menu Principal -->
-   <HBox spacing="15" alignment="CENTER">
+   <HBox spacing="10" alignment="CENTER" style="-fx-wrap-text: true;">
       <Button onAction="#mostrarInserir" text="Inserir" prefWidth="90"/>
       <Button onAction="#mostrarRemover" text="Remover" prefWidth="90"/>
       <Button onAction="#mostrarCodificar" text="Codificar" prefWidth="90"/>
       <Button onAction="#mostrarDecodificar" text="Decodificar" prefWidth="90"/>
-      <Button onAction="#atualizarArvore" text="Ver Árvore" prefWidth="90"/>
-      <Button onAction="#mostrarBuscaProfundidade" text="Buscar profundidade" prefWidth="90"/>
+      <Button onAction="#mostrarBuscaProfundidade" text="Profundidade" prefWidth="90"/>
+      <Button onAction="#mostrarDetalhesNo" text="Detalhes Nó" prefWidth="90"/>
+      <Button onAction="#mostrarDetalhesArvore" text="Detalhes Árvore" prefWidth="110"/>
    </HBox>
    
-   <!-- Painéis -->
+   <!-- Painel: Inserir -->
    <VBox fx:id="inserirPanel" visible="false" managed="false" spacing="10">
       <Label text="Inserir Caractere:" style="-fx-font-weight: bold"/>
       <HBox spacing="10">
@@ -32,6 +33,7 @@
       </HBox>
    </VBox>
    
+   <!-- Painel: Remover -->
    <VBox fx:id="removerPanel" visible="false" managed="false" spacing="10">
       <Label text="Remover Caractere:" style="-fx-font-weight: bold"/>
       <HBox spacing="10">
@@ -40,6 +42,7 @@
       </HBox>
    </VBox>
    
+   <!-- Painel: Codificar -->
    <VBox fx:id="codificarPanel" visible="false" managed="false" spacing="10">
       <Label text="Codificar Texto:" style="-fx-font-weight: bold"/>
       <TextField fx:id="textoInput" promptText="Digite o texto"/>
@@ -47,6 +50,7 @@
       <TextArea fx:id="resultadoCodificacao" prefHeight="60" editable="false"/>
    </VBox>
    
+   <!-- Painel: Decodificar -->
    <VBox fx:id="decodificarPanel" visible="false" managed="false" spacing="10">
       <Label text="Decodificar Morse:" style="-fx-font-weight: bold"/>
       <TextField fx:id="morseInputDecode" promptText="Código morse"/>
@@ -54,6 +58,7 @@
       <TextArea fx:id="resultadoDecodificacao" prefHeight="60" editable="false"/>
    </VBox>
 
+   <!-- Painel: Buscar Profundidade -->
    <VBox fx:id="buscarProfundidadePanel" visible="false" managed="false" spacing="10">
       <Label text="Buscar Profundidade:" style="-fx-font-weight: bold"/>
       <HBox spacing="10">
@@ -61,6 +66,27 @@
          <Button onAction="#buscarProfundidadeCaractere" text="Buscar"/>
       </HBox>
       <TextArea fx:id="resultadoProfundidade" prefHeight="40" editable="false"/>
+   </VBox>
+   
+   <!-- Painel: Detalhes do Nó -->
+   <VBox fx:id="detalhesNoPanel" visible="false" managed="false" spacing="10">
+      <Label text="Ver Detalhes do Nó:" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+      <HBox spacing="10">
+         <TextField fx:id="detalhesNoInput" promptText="Digite o caractere" prefWidth="150"/>
+         <Button onAction="#verDetalhesNo" text="Ver Detalhes"/>
+      </HBox>
+      <TextArea fx:id="resultadoDetalhesNo" prefHeight="350" editable="false" 
+                style="-fx-font-family: 'Courier New'; -fx-font-size: 12px;"/>
+   </VBox>
+   
+   <!-- Painel: Detalhes da Árvore -->
+   <VBox fx:id="detalhesArvorePanel" visible="false" managed="false" spacing="10">
+      <Label text="Ver Detalhes da Árvore:" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+      <Button onAction="#verDetalhesArvore" text="Consultar Detalhes"/>
+      <ScrollPane fitToWidth="true" prefHeight="500">
+         <TextArea fx:id="resultadoDetalhesArvore" prefHeight="500" editable="false" 
+                   style="-fx-font-family: 'Courier New'; -fx-font-size: 12px;"/>
+      </ScrollPane>
    </VBox>
    
    <!-- Mensagens -->

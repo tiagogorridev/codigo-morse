@@ -1,4 +1,3 @@
-
 package com.morse;
 
 import javafx.application.Application;
@@ -12,7 +11,6 @@ public class MorseApp extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
-        
         stage.setTitle("Árvore Binária - Código Morse");
         stage.setScene(scene);
         stage.show();
